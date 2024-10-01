@@ -2,4 +2,7 @@
     <string name="app_name">FirebaseWithMVVM</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="note_title">Note Title</string>
+    <string name="todo">TODO</string>
+    <string name="note_description">Note description goes here.</string>
 </resources>

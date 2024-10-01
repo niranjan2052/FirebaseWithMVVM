@@ -1,15 +1,19 @@
 package com.myproject.firebasewithmvvm.View.Adapter;
 
-import android.util.Log;
+import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.myproject.firebasewithmvvm.Model.Note;
 import com.myproject.firebasewithmvvm.R;
+import com.myproject.firebasewithmvvm.ViewModel.NoteViewModel;
 import com.myproject.firebasewithmvvm.databinding.ItemNoteBinding;
 
 import java.util.ArrayList;
@@ -17,7 +21,11 @@ import java.util.List;
 
 public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteViewHolder> {
     private List<Note> notes = new ArrayList<>();
-    String TAG = "NoteAdapter";
+    NoteViewModel viewModel;
+
+    public NoteAdapter(NoteViewModel viewModel) {
+        this.viewModel = viewModel;
+    }
 
 
     @NonNull
@@ -30,9 +38,14 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteViewHolder
     @Override
     public void onBindViewHolder(@NonNull NoteViewHolder holder, int position) {
         Note currentNote = notes.get(position);
-        Log.d(TAG, "onBindViewHolder: " + currentNote.getId());
         holder.binding.titleTextView.setText(currentNote.getTitle());
         holder.binding.descriptionTextView.setText(currentNote.getDescription());
+
+        holder.binding.ivDeleteNote.setOnClickListener(view -> new AlertDialog.Builder(holder.itemView.getContext())
+                .setTitle("Delete")
+                .setMessage("Do you really want to Delete this Note")
+                .setIcon(R.drawable.ic_delete)
+                .setPositiveButton("Yes", (dialogInterface, i) -> viewModel.deleteNote(currentNote.getId())).setNegativeButton("No", null).show());
 
     }
 
@@ -41,6 +54,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteViewHolder
         return notes.size();
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     public void setNotes(List<Note> notes) {
         this.notes = notes;
         notifyDataSetChanged();
